@@ -9,9 +9,7 @@
     <p>Rock Paper and Scissors</p>
     <button
       onclick="
-    humanChoice = 'Rock'
-    decisionWinner();
-    alert(`You have chosen ${humanChoice}. Computer has chosen ${computerChoice}. You ${decision}`)
+    decisionWinner('Rock');
     "
     >
       Rock
@@ -19,9 +17,7 @@
 
     <button
       onclick="
-    humanChoice = 'Paper'
-    decisionWinner();
-    alert(`You have chosen ${humanChoice}. Computer has chosen ${computerChoice}. You ${decision}`)
+    decisionWinner('Paper');
     "
     >
       Paper
@@ -29,12 +25,19 @@
 
     <button
       onclick="
-    humanChoice = 'Scissors'
-    decisionWinner();
-    alert(`You have chosen ${humanChoice}. Computer has chosen ${computerChoice}. You ${decision}`)
+    decisionWinner('Scissors');
     "
     >
       Scissors
+    </button>
+
+    <button
+      onclick=" 
+    reset();
+    console.log('Score has been reset.')
+    "
+    >
+      Reset Score
     </button>
 
     <script>
@@ -42,7 +45,9 @@
       let computerChoice = "";
       let decision = "";
 
-      function decisionWinner() {
+      const score = JSON.parse(localStorage.getItem("score"));
+
+      function decisionWinner(humanChoice) {
         const random = Math.random();
 
         //Computer's Choice
@@ -70,6 +75,27 @@
         } else if (computerChoice == "Paper" && humanChoice == "Scissors") {
           decision = "Won!";
         }
+
+        if (decision === "Tied!") {
+          score.tie++;
+        } else if (decision === "Won!") {
+          score.wins++;
+        } else if (decision === "Lost!") {
+          score.loss++;
+        }
+
+        localStorage.setItem("score", JSON.stringify(score));
+
+        alert(
+          `You have chosen ${humanChoice}. Computer has chosen ${computerChoice}. You ${decision}
+Wins: ${score.wins}, Losses: ${score.loss}, Ties ${score.tie}`
+        );
+      }
+
+      function reset() {
+        score.tie = 0;
+        score.loss = 0;
+        score.wins = 0;
       }
     </script>
   </body>
